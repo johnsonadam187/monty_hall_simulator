@@ -1,0 +1,42 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+def monty_hall_simulator(cycles, switch=False):
+    overall_wins_counter = []
+    for num in range(0, cycles):
+        switch_door = switch
+        second_round_list = []
+        wins_counter = []
+        for item in range(0, 100):
+            door_list = [1, 2, 3]
+            winning_door = np.random.choice(door_list)
+            initial_door_choice = np.random.choice(door_list)
+            second_round_list.append(initial_door_choice)
+            if initial_door_choice == winning_door:
+                door_list.remove(initial_door_choice)
+                second_choice = np.random.choice(door_list)
+                second_round_list.append(second_choice)
+                if switch_door == True:
+                    wins_counter.append(0)
+                else:
+                    wins_counter.append(1)
+            else:
+                second_round_list.append(winning_door)
+                if switch_door == True:
+                    wins_counter.append(1)
+                else:
+                    wins_counter.append(0)           
+
+        wins = np.array(wins_counter).sum()            
+        overall_wins_counter.append(wins)
+    return overall_wins_counter
+    
+monty_hall_results = monty_hall_simulator(10000, switch=True)
+sns.distplot(monty_hall_results, bins = 40)
+plt.show()
+
+monty_hall_results = monty_hall_simulator(10000, switch=False)
+sns.distplot(monty_hall_results, bins = 40)
+plt.show()
